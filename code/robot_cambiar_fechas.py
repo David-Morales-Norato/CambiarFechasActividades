@@ -36,8 +36,9 @@ class robot_cambiar_fechas(Robot):
 
             # Se abre camino hasta el formulario para cambiar fechas
             self.driver.find_element_by_link_text("Editar ajustes").click()
-            self.driver.find_element_by_link_text("Temporalización").location_once_scrolled_into_view
+            self.driver.find_element_by_link_text("General").click()
             self.driver.find_element_by_link_text("Temporalización").click()
+            self.driver.find_element_by_link_text("Temporalización").location_once_scrolled_into_view
             
 
         except Exception as e:
@@ -48,7 +49,6 @@ class robot_cambiar_fechas(Robot):
 
         # Mover número 'n' de semanas: 1
         # Mover a una fecha específica: 2
-        print(eleccion)
         if(eleccion == 1): # En caso de mover un n número de semanas 
             numero_semanas = int(fila[1])
             fecha_open = self.get_fecha('open')
