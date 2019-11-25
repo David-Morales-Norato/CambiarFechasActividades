@@ -178,30 +178,10 @@ class robot_gui():
             self.log += self.LOGS[0] + str(self.file_path)
             self.label_logs_result.config(text = self.LOGS[0])
 
+
+    @abstractmethod
     def revisar_log(self):
-
-        log = self.robot.log
-        salida = ''
-
-
-        cursos_procesados = log.count("[1]")
-        cursos_exitosos = log.count("[4]")
-        fallos_camino = log.count("[-2]")
-        cursos_fallidos = log.count("[-4]")
-        salida += "Total cursos procesados: "+ str(cursos_procesados) + '\n'
-        salida += "Total cursos recorridos exitosamente: "+ str(cursos_exitosos) + '\n'
-        salida += "Total cursos recorridos incorrectamente: "+ str(cursos_fallidos) + '\n'
-        salida += "Total cursos con fallo en el camino a resultados: "+ str(fallos_camino) + '\n'
-
-        if(self.opcion.get() == 2):
-            
-            preguntas_procesadas = log.count("[2]")
-            preguntas_exitosas = log.count("[3]")
-            preguntas_fallidas = log.count("[-3]")
-            salida += "Total preguntas procesadas: "+ str(preguntas_procesadas) + '\n'
-            salida += "Total preguntas fallidas a procesar: "+ str(preguntas_fallidas) + '\n'
-            salida += "Total preguntas modificadas correctamente: "+ str(preguntas_exitosas) + '\n'
-        return salida
+        pass
 
     def imprimir_estadisticas(self):
         # Imprime las estadísticas en el label de la GUI

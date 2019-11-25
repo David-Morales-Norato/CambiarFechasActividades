@@ -75,16 +75,19 @@ class Robot(ABC):
                 self.log += self._LOGS[1] + id # Registramos curso a modificar
                 self.driver.get(link_question) # se dirige a ese link
 
+                # Esta tupla es el argumento donde irán las variables de control
+                # La elección indica que tipo de tarea se va a realizar
+                # El contador indica que fila de los datos se está tratando
+                variables_de_control = [eleccion,contador]
                 # Hacemos el debido tratamiento para el cual está recorriendo cursos
-                self.tratamiento_curso(datos,eleccion,contador)
-
+                self.tratamiento_curso(datos,variables_de_control)
+                contador +=1
             except Exception as e:
                 # Si ocurre un error se guarda el fallo
-                print(e)
                 self.log+=self._LOGS[5]+id +"| EXCEPTION: "+ str(e)
 
     @abstractmethod
-    def tratamiento_curso(self,datos,eleccion):
+    def tratamiento_curso(self,datos,variables_de_control):
         pass
         
     def cerrar(self):

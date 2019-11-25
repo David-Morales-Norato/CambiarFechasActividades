@@ -2,6 +2,8 @@ from robot_gui import robot_gui, tk
 from robot_cambiar_fechas import robot_cambiar_fechas
 from read_files import leer_datos_cambiar_fechas
 
+DEBUG = True
+
 class cambiar_fechas_gui(robot_gui):
     def __init__(self):
         super().__init__()
@@ -14,6 +16,13 @@ class cambiar_fechas_gui(robot_gui):
         # Botones que son las opciones
         tk.Radiobutton(self.frame_left, text="Mover número 'n' de semanas",padx = 20, variable=self.opcion, value=1).grid(row=1,column=3)
         tk.Radiobutton(self.frame_left, text="Mover a una fecha específica",padx = 20, variable=self.opcion, value=2).grid(row=2,column=3)
+
+        if(DEBUG):
+            self.file_path = "/home/david-norato/Documentos/EXPERTIC/cambiar_fechas_CPS/datos/datos_num_semanas.csv"
+            self.input_user_entry.insert(0,"exper-tic")
+            self.input_pass_entry.insert(0,"exper-tic")
+            self.archivo_cargado = True
+            self.opcion.set(1)
         self.root.mainloop()
 
     def pre_run_especifico(self):
@@ -37,3 +46,17 @@ class cambiar_fechas_gui(robot_gui):
         tipo_recalificacion = tipo_tarea
         # Corre el robot y recorre cursos para recalificar 
         self.robot.recorrer_cursos(datos, tipo_recalificacion)
+
+    def revisar_log(self):
+
+        log = self.robot.log
+        salida = ''
+
+
+        activiades_procesadas = log.count("[1]")
+        actividades_fallidas = log.count("[-5]")
+        actividades_exitosas = log.count("[5]")
+        salida += "Total actividades procesadas: "+ str(activiades_procesadas) + '\n'
+        salida += "Total actividades modificadas exitosamente: "+ str(actividades_exitosas) + '\n'
+        salida += "Total actividades modificadas incorrectamente: "+ str(actividades_fallidas) + '\n'
+        return salida
