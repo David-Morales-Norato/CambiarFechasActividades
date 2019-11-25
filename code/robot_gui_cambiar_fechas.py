@@ -28,6 +28,7 @@ class cambiar_fechas_gui(robot_gui):
     def pre_run_especifico(self):
         # Lemos los datos del archivo CSV
         datos = leer_datos_cambiar_fechas(self.file_path, self.opcion.get())
+        print(self.opcion.get())
         if(len(datos[-1])<1): # Si no hay algún error al leer los datos
             # Se pasan los datos y la opción de la tarea del robot
             self.run_robot(datos,self.opcion.get())
