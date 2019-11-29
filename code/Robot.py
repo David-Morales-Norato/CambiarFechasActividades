@@ -65,11 +65,11 @@ class Robot(ABC):
             self.log = self._LOGS[0]+ str(e)
 
     def recorrer_cursos(self,datos, eleccion):
-        links_cursos = datos[0]
+        id_cursos = datos[0]
         # Va a indicar el curso actual que se está tratando
         contador = 0
-        for link_curse in links_cursos: # Para cada curso de los que se proporcionaron
-            id = link_curse.split('=')[1] #Obtenemos el id del curso
+        for id in id_cursos: # Para cada curso de los que se proporcionaron Obtenemos el id del curso
+            id = str(id)
             link_question = self.__QUESTION_LINK+id # links a los cuestionarios de ese curso
             try:
                 self.log += self._LOGS[1] + id # Registramos curso a modificar

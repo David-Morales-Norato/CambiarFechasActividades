@@ -19,6 +19,7 @@ class robot_cambiar_fechas(Robot):
 
     def tratamiento_curso(self,datos, variables_de_control):
         # Obtenemos los datos sin contar el  último elemento
+
         datos = np.array(datos[1:][:-1])
         # Eleccion es el primer elemento
         eleccion = variables_de_control[0]

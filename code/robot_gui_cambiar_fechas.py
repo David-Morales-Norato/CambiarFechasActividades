@@ -19,7 +19,7 @@ class cambiar_fechas_gui(robot_gui):
         tk.Radiobutton(self.frame_left, text="Mover a una fecha específica",padx = 20, variable=self.opcion, value=2).grid(row=2,column=3)
         tk.Radiobutton(self.frame_left, text="Mover según el calendario académico",padx = 20, variable=self.opcion, value=3).grid(row=3,column=3)
         if(DEBUG):
-            self.file_path = "/home/david-norato/Documentos/EXPERTIC/cambiar_fechas_CPS/datos/datos_num_semanas.csv"
+            self.file_path = "/home/david-norato/Documentos/EXPERTIC/cambiar_fechas_actividades/datos/datos_cambiar_fechas_calendario_academico.xlsx"
             self.input_user_entry.insert(0,"exper-tic")
             self.input_pass_entry.insert(0,"exper-tic")
             self.archivo_cargado = True
@@ -44,6 +44,7 @@ class cambiar_fechas_gui(robot_gui):
 
         # Mover número 'n' de semanas 1
         # Mover a una fecha específica 2
+        # Mover según el calendario académico 3
         tipo_recalificacion = tipo_tarea
         # Corre el robot y recorre cursos para recalificar 
         self.robot.recorrer_cursos(datos, tipo_recalificacion)
