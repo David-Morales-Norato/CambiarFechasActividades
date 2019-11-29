@@ -1,9 +1,4 @@
-from robot_gui_cambiar_fechas import cambiar_fechas_gui
-cambiar_fechas_gui()
+from read_files import leer_datos_cambiar_fechas
+file_name = "/home/david-norato/Documentos/EXPERTIC/cambiar_fechas_actividades/datos/datos_cambiar_fechas_calendario_academico.xlsx"
 
-
-# Por hacer documentación
-
-# Crear cuaderno de jupyter readme
-# Mirar bien comentarios
-    
+datos = leer_datos_cambiar_fechas(file_name,3)
