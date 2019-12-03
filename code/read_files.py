@@ -58,37 +58,45 @@ def lectura_calendario_academico(archivo_excel):
     actividad = datos_cursos_actividad[1]
     log += datos_cursos_actividad[-1]
 
+    # Leemos la primera vez en la semana donde se encuentra el curso
+    datos_primera_vez = leer_columna(cursos_actividades_df,"PRIMER_ENCUENTRO")
+    primera_vez = datos_primera_vez[0]
+    log += datos_primera_vez[1]
+
     # Leemos los nombres de los cursos
     datos_nombres_cursos = leer_columna(cursos_actividades_df,"NOMBRES_CURSOS")
     nombres_cursos = datos_nombres_cursos[0]
     log += datos_nombres_cursos[1]
 
     # Se empaqueta la primera hoja
-    primera_hoja = [nombres_cursos,cursos,actividad]
+    primera_hoja = [cursos,nombres_cursos,primera_vez,actividad]
 
 
     # Leemos los datos que contiene la seguna hoja
     # Serán organizados en un diccionario
-    # Cada curso le corresponden un número de semanas y las lecciones que se ven en cada semana
-    # segunda_hoja = {"nombre_curso": [numero_semanas, lecciones]}
+    # Cada curso le corresponden lecciones que se ven en cada semana
+    # Las semanas estarán en la tercera hoja
+    # Segunda hoja = {"nombre_curso": lecciones}
+
     segunda_hoja = {}
     for curso in set(nombres_cursos):
-        # Leemos el número de semanas
-        datos_no_semanas = leer_columna(asignaturas_semanas_df,curso+"_NÚMERO_SEMANA")
-        no_semanas = datos_no_semanas[0]
-        log += datos_no_semanas[1]
-
         # Leemos las lecciones correspondientes al número de semanas
         datos_lecciones = leer_columna(asignaturas_semanas_df,curso+"_LECCIONES")
         lecciones = datos_lecciones[0]
         log += datos_lecciones[1]
 
-        segunda_hoja.update({curso:[no_semanas,lecciones]})
-
+        segunda_hoja.update({curso:lecciones})
 
     # Leemos los datos que contiene la tercera hoja
-    no_semana = leer_columna(semanas_fechas_df,"NÚMERO_SEMANA")
-    fecha_inicio_semana = leer_columna(semanas_fechas_df,"FECHA_INICIO_SEMANA")
+    datos_no_semana = leer_columna(semanas_fechas_df,"NÚMERO_SEMANA")
+    no_semana = datos_no_semana[0]
+    log += datos_no_semana[1]
+
+    
+    datos_fecha_inicio_semana = leer_columna(semanas_fechas_df,"FECHA_INICIO_SEMANA")
+    fecha_inicio_semana = datos_fecha_inicio_semana[0]
+    log += datos_fecha_inicio_semana[1]
+
 
     tercera_hoja = [no_semana,fecha_inicio_semana]
     
@@ -184,7 +192,7 @@ def leer_columna(data_frame, nombre_columna):
     log = ''
     try:
         # Intenta encontrar la columna 
- 
+
         columna = data_frame[nombre_columna].dropna().tolist()
 
         if(len(columna) == 0):# Si no encuentra bota error 
@@ -195,4 +203,5 @@ def leer_columna(data_frame, nombre_columna):
         log += "Fallo al leer columna: " + str(e) + "\n"
         columna = None
 
+    
     return [columna,log]
