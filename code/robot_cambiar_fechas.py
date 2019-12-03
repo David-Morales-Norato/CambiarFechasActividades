@@ -10,7 +10,8 @@ class robot_cambiar_fechas(Robot):
         super().__init__(DRIVER_PATH)
         # String que tiene el id de los campos para seleccionar la fecha
 
-
+        # delta de días entre cada inicio de semana del calendario académico
+        self.DELTA_DIAS = 7
         logs_cambiar_fechas = [
             '[-5] Error al llenar el formulario para cambiar fechas de la actividad| Exception: ',
             '[5]  Se diligenció correctamente el formulario para cambiar fechas de la actividad']
@@ -18,17 +19,29 @@ class robot_cambiar_fechas(Robot):
 
 
     def tratamiento_curso(self,datos, variables_de_control):
-        # Obtenemos los datos sin contar el  último elemento
-
-        datos = np.array(datos[1:][:-1])
         # Eleccion es el primer elemento
         eleccion = variables_de_control[0]
         # Contador el segundo elemento
         contador = variables_de_control[1]
-        # Se separan los datos
-        fila = datos[:,contador]
-        # Adquirimos el CPL a calificar
-        ACTIVIDAD = fila[0] 
+        
+        if(eleccion !=3):
+            # Obtenemos los datos sin contar el  último elemento
+            datos = np.array(datos[1:][:-1])
+            # Se separan los datos
+            fila = datos[:,contador]
+            # Adquirimos el CPL a calificar
+            ACTIVIDAD = fila[0] 
+            # Si la elección es 1 o 2 los datos vienen empaquetados de fomra similar
+        else:
+            # Si la elección es 3 los datos tienen 3 hojas y toca hacer tratamiento especial
+            # Obtenemos la primera hoja que tiene nombres cursos, ids y actividades
+            datos_cursos_actividad = datos[0]
+            # Lo hacemos un np.array
+            datos = np.array(datos_cursos_actividad)
+            # Se separan los datos
+            fila = datos[:,contador]
+            # Adquirimos el CPL a calificar
+            ACTIVIDAD = fila[2]
         try:
             # Se busca la actividad a cambiar la fecha
             actividad = self.driver.find_element_by_partial_link_text(ACTIVIDAD)
@@ -71,6 +84,23 @@ class robot_cambiar_fechas(Robot):
             inicio_actividad = datetime.datetime.strptime(fecha_inicio,  '%d-%m-%Y-%H:%M')
             fin_actividad = datetime.datetime.strptime(fecha_fin,  '%d-%m-%Y-%H:%M')
 
+        elif(eleccion == 3):
+            # The fuck
+            segunda_hoja = datos[1]
+            tercera_hoja = datos[2]
+            nombre_curso = fila[0]
+            agenda_curso = segunda_hoja.get(nombre_curso)
+            numero_semanas_de_actividades = agenda_curso[0]
+            lecciones = agenda_curso[1]
+            leccion_actividad = ACTIVIDAD[:-3]
+            indice_leccion = lecciones.index(leccion_actividad)
+            numero_semana_de_actividad = numero_semanas_de_actividades[indice_leccion]
+            indice_no_semana = tercera_hoja[0].index(numero_semana_de_actividad)
+            fecha_inicio_actividad = tercera_hoja[1][indice_no_semana]
+            fecha_inicio = datetime.datetime.strptime(fecha_inicio_actividad,'%Y-%m-%d')
+            fecha_fin = fecha_inicio + datetime.timedelta(days=self.DELTA_DIAS)
+            
+            pass
         try:
             # Seteamos las fechas de inicio y de fin en el formulario
             self.set_fecha('open',inicio_actividad)
