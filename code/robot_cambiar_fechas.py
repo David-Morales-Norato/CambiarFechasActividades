@@ -10,8 +10,8 @@ class robot_cambiar_fechas(Robot):
         super().__init__(DRIVER_PATH)
         # String que tiene el id de los campos para seleccionar la fecha
 
-        # delta de días entre cada inicio de semana del calendario académico
-        self.DELTA_DIAS = 7
+        # delta de horas entre cada inicio y fin de una actividad
+        self.DELTA_HORAS = 24
         logs_cambiar_fechas = [
             '[-5] Error al llenar el formulario para cambiar fechas de la actividad| Exception: ',
             '[5]  Se diligenció correctamente el formulario para cambiar fechas de la actividad']
@@ -29,25 +29,25 @@ class robot_cambiar_fechas(Robot):
             datos = np.array(datos[1:][:-1])
             # Se separan los datos
             fila = datos[:,contador]
-            # Adquirimos el CPL a calificar
+            # Adquirimos la actividar a cambiarle la fecha
             ACTIVIDAD = fila[0] 
             # Si la elección es 1 o 2 los datos vienen empaquetados de fomra similar
         else:
             # Si la elección es 3 los datos tienen 3 hojas y toca hacer tratamiento especial
             # Obtenemos la primera hoja que tiene nombres cursos, ids y actividades
-            datos_cursos_actividad = datos[0]
+            primera_hoja = datos[1]
             # Lo hacemos un np.array
-            datos = np.array(datos_cursos_actividad)
+            primera_hoja = np.array(primera_hoja)
             # Se separan los datos
-            fila = datos[:,contador]
+            fila = primera_hoja[:,contador]
             # Adquirimos el CPL a calificar
-            ACTIVIDAD = fila[2]
+            ACTIVIDAD = fila[1]
         try:
             # Se busca la actividad a cambiar la fecha
             actividad = self.driver.find_element_by_partial_link_text(ACTIVIDAD)
             actividad.location_once_scrolled_into_view
             actividad.click() 
-
+            
             # Se abre camino hasta el formulario para cambiar fechas
             self.driver.find_element_by_link_text("Editar ajustes").click()
             self.driver.find_element_by_link_text("General").click()
@@ -85,30 +85,56 @@ class robot_cambiar_fechas(Robot):
             fin_actividad = datetime.datetime.strptime(fecha_fin,  '%d-%m-%Y-%H:%M')
 
         elif(eleccion == 3):
-            # The fuck
-            segunda_hoja = datos[1]
-            tercera_hoja = datos[2]
-            nombre_curso = fila[0]
-            agenda_curso = segunda_hoja.get(nombre_curso)
-            numero_semanas_de_actividades = agenda_curso[0]
-            lecciones = agenda_curso[1]
-            leccion_actividad = ACTIVIDAD[:-3]
-            indice_leccion = lecciones.index(leccion_actividad)
-            numero_semana_de_actividad = numero_semanas_de_actividades[indice_leccion]
-            indice_no_semana = tercera_hoja[0].index(numero_semana_de_actividad)
-            fecha_inicio_actividad = tercera_hoja[1][indice_no_semana]
-            fecha_inicio = datetime.datetime.strptime(fecha_inicio_actividad,'%Y-%m-%d')
-            fecha_fin = fecha_inicio + datetime.timedelta(days=self.DELTA_DIAS)
+            # Obtenemos el resto de las hojas
+            segunda_hoja = datos[2]
+            tercera_hoja = datos[3]
+
             
+            
+            # Obtenemos el nombre del curso y su primer encuentro para cambiarle la fecha
+            nombre_curso = fila[2]
+            # Primer día de la semana en que se encuentra el curso para así modificarlo
+            # 36 horas antes de que empieze
+            primer_encuentro = fila[3]
+            
+            # Según sus agenda de semanas y lecciones 
+            lecciones = segunda_hoja.get(nombre_curso)
+
+            # Las actividades corresponden a una lección, ejemplo: CPS1.3, lección: 1.3
+            leccion_actividad = ACTIVIDAD[-3:]
+
+            # Obtenemos la posición de esa lección
+            # Esa misma va a ser la semana que le corresponde a la actividad
+            indice_leccion = lecciones.index(leccion_actividad)
+            # y esa misma posición corresponde a la fecha para esa semana
+            # Leemos la fecha en la posición de esa lección
+            fecha_semana_sin_hora = str(tercera_hoja[indice_leccion]).split(" ")[0]
+
+            # PRIMER ENCUENTRO TIENE ESTE FORMATO:
+            # día:hora_inicio-hora_fin
+            # Solo nos importa hora_inicio y día
+            # Obtenemos el día de la semana que se encuentran por primera vez
+            # se resta 1 para que quede: # 0 Lunes, 1 Martes, 2 Miércoles, 3 Jueves, 4 Viernes, 5 Sábado, 6 Domingo
+            día_semana_actividad = str(int(primer_encuentro.split(":")[0])-1)
+            # Obtenemos la hora de inicio del primer encuentro.
+            hora_primer_encuentro = primer_encuentro.split(":")[1].split("-")[0]
+
+            # Cuadramos la fecha con hora de inicio de la actividad
+            # minutos 00
+            fecha_semana_con_hora = fecha_semana_sin_hora +'-'+hora_primer_encuentro+':00'
+            fecha_total_semana_de_actividad = datetime.datetime.strptime(fecha_semana_con_hora,'%Y-%m-%d-%H:%M') 
+            inicio_actividad = self.proximo_dia_y_hora_actividad(fecha_total_semana_de_actividad,día_semana_actividad)
+
+            fin_actividad = inicio_actividad + datetime.timedelta(hours=self.DELTA_HORAS)
             pass
         try:
             # Seteamos las fechas de inicio y de fin en el formulario
             self.set_fecha('open',inicio_actividad)
             self.set_fecha('close',fin_actividad)
 
-            # Enviamos el formulario
-            self.driver.find_element_by_id('id_submitbutton2').location_once_scrolled_into_view
-            self.driver.find_element_by_id('id_submitbutton2').click()
+            # # Enviamos el formulario
+            # self.driver.find_element_by_id('id_submitbutton2').location_once_scrolled_into_view
+            # self.driver.find_element_by_id('id_submitbutton2').click()
         except Exception as e:
             # En caso de no ser encontrado se captura la excepción y  se registra en el log
             self.log +=self._LOGS[6]+ str(e)
@@ -164,3 +190,9 @@ class robot_cambiar_fechas(Robot):
 
         fecha = day + '-' + month + '-' + year + '-' + hour + ':' + minute
         return datetime.datetime.strptime(fecha,  '%d-%m-%Y-%H:%M')
+
+    def proximo_dia_y_hora_actividad(self,d, weekday):
+        days_ahead = int(weekday) - d.weekday()
+        if days_ahead <= 0: # Target day already happened this week
+            days_ahead += 7
+        return d + datetime.timedelta(days_ahead) - datetime.timedelta(hours=36)

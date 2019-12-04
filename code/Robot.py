@@ -86,6 +86,8 @@ class Robot(ABC):
                 # Si ocurre un error se guarda el fallo
                 self.log+=self._LOGS[5]+id +"| EXCEPTION: "+ str(e)
 
+        print(self.log)
+
     @abstractmethod
     def tratamiento_curso(self,datos,variables_de_control):
         pass

@@ -69,7 +69,7 @@ def lectura_calendario_academico(archivo_excel):
     log += datos_nombres_cursos[1]
 
     # Se empaqueta la primera hoja
-    primera_hoja = [cursos,nombres_cursos,primera_vez,actividad]
+    primera_hoja = [cursos,actividad,nombres_cursos,primera_vez]
 
 
     # Leemos los datos que contiene la seguna hoja
@@ -87,20 +87,18 @@ def lectura_calendario_academico(archivo_excel):
 
         segunda_hoja.update({curso:lecciones})
 
-    # Leemos los datos que contiene la tercera hoja
-    datos_no_semana = leer_columna(semanas_fechas_df,"NÚMERO_SEMANA")
-    no_semana = datos_no_semana[0]
-    log += datos_no_semana[1]
 
-    
+    # Leemos solo la fecha estipulada del calendario académico para cada semena
     datos_fecha_inicio_semana = leer_columna(semanas_fechas_df,"FECHA_INICIO_SEMANA")
     fecha_inicio_semana = datos_fecha_inicio_semana[0]
     log += datos_fecha_inicio_semana[1]
 
-
-    tercera_hoja = [no_semana,fecha_inicio_semana]
+    # ignoramos el numero de esa semana por que el busca según el índice de esa lección
+    # la fecha de la semana 
+    # la columna número semanas solo es para que el usuario se guíe
+    tercera_hoja = fecha_inicio_semana
     
-    return [primera_hoja, segunda_hoja,tercera_hoja, log]
+    return [cursos,primera_hoja, segunda_hoja,tercera_hoja, log]
 
 def lectura_n_semanas(data):
     log = ''

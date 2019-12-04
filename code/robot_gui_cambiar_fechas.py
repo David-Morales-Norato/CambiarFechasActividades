@@ -19,7 +19,7 @@ class cambiar_fechas_gui(robot_gui):
         tk.Radiobutton(self.frame_left, text="Mover a una fecha específica",padx = 20, variable=self.opcion, value=2).grid(row=2,column=3)
         tk.Radiobutton(self.frame_left, text="Mover según el calendario académico",padx = 20, variable=self.opcion, value=3).grid(row=3,column=3)
         if(DEBUG):
-            self.file_path = "/home/david-norato/Documentos/EXPERTIC/cambiar_fechas_actividades/datos/datos_cambiar_fechas_calendario_académico.xlsx"
+            self.file_path = "/home/david-norato/Documentos/EXPERTIC/cambiar_fechas_actividades/datos/datos_cambiar_fechas_calendario.xlsx"
             self.input_user_entry.insert(0,"exper-tic")
             self.input_pass_entry.insert(0,"exper-tic")
             self.archivo_cargado = True
@@ -61,4 +61,5 @@ class cambiar_fechas_gui(robot_gui):
         salida += "Total actividades procesadas: "+ str(activiades_procesadas) + '\n'
         salida += "Total actividades modificadas exitosamente: "+ str(actividades_exitosas) + '\n'
         salida += "Total actividades modificadas incorrectamente: "+ str(actividades_fallidas) + '\n'
+        print(self.log)
         return salida

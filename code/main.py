@@ -4,9 +4,11 @@ if __name__ == '__main__':
     cambiar_fechas_gui()
 
 # Por hacer
-# Cambiar la forma en que se pasan los datos a traves de los objetos
-# Hay problemas ya que la forma en que vienen empaquetados los datos
-# killme plis
+# Probar si está cambiando bien las fechas para la tercera opción
+# REARREGLAR TODOS LOS OBJETOS
+
+# Crear nuevo objeto heredable read_files
+
 
 # Por hacer documentación
 
