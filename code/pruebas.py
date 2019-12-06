@@ -1,6 +1,6 @@
-from read_files import leer_datos_cambiar_fechas
+from leer_cambiar_fechas import leer_datos_cambiar_fechas
 file_name = "/home/david-norato/Documentos/EXPERTIC/cambiar_fechas_actividades/datos/datos_cambiar_fechas_calendario.xlsx"
 
-datos = leer_datos_cambiar_fechas(file_name,3)
-asd = datos[1:]
-print(asd[0])
+leer_datos = leer_datos_cambiar_fechas()
+datos = leer_datos.lectura_especifica(file_name,3)
+print(leer_datos.log)

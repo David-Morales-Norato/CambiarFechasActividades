@@ -26,7 +26,7 @@ class robot_cambiar_fechas(Robot):
         
         if(eleccion !=3):
             # Obtenemos los datos sin contar el  último elemento
-            datos = np.array(datos[1:][:-1])
+            datos = np.array(datos[1:])
             # Se separan los datos
             fila = datos[:,contador]
             # Adquirimos la actividar a cambiarle la fecha
