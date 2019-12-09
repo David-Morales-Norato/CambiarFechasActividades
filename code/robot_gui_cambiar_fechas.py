@@ -19,15 +19,15 @@ class cambiar_fechas_gui(robot_gui):
         tk.Radiobutton(self.frame_left, text="Mover a una fecha específica",padx = 20, variable=self.opcion, value=2).grid(row=2,column=3)
         tk.Radiobutton(self.frame_left, text="Mover según el calendario académico",padx = 20, variable=self.opcion, value=3).grid(row=3,column=3)
         if(DEBUG):
-            self.file_path = "/home/david-norato/Documentos/EXPERTIC/cambiar_fechas_actividades/datos/datos_num_semanas.xlsx"
+            self.file_path = "/home/david-norato/Documentos/EXPERTIC/cambiar_fechas_actividades/datos/datos_fecha_fija.xlsx"
             self.input_user_entry.insert(0,"exper-tic")
             self.input_pass_entry.insert(0,"exper-tic")
             self.archivo_cargado = True
-            self.opcion.set(1)
+            self.opcion.set(2)
         self.root.mainloop()
 
     def pre_run_especifico(self):
-        # Lemos los datos del archivo CSV
+        # Lemos los datos del archivo xlxs
         leer_datos = leer_datos_cambiar_fechas()
         datos = leer_datos.lectura_especifica(self.file_path, self.opcion.get())
         if(len(leer_datos.get_log())<1): # Si no hay algún error al leer los datos

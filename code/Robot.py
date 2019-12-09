@@ -71,6 +71,7 @@ class Robot(ABC):
         for id in id_cursos: # Para cada curso de los que se proporcionaron Obtenemos el id del curso
             id = str(id)
             link_question = self.__QUESTION_LINK+id # links a los cuestionarios de ese curso
+            print(link_question)
             try:
                 self.log += self._LOGS[1] + id # Registramos curso a modificar
                 self.driver.get(link_question) # se dirige a ese link

@@ -1,7 +1,6 @@
 import numpy as np
 import datetime
 from Robot import Robot
-from selenium.common.exceptions import NoSuchElementException,StaleElementReferenceException
 from selenium.webdriver.support.ui import Select
 
 class robot_cambiar_fechas(Robot):
@@ -25,7 +24,7 @@ class robot_cambiar_fechas(Robot):
         contador = variables_de_control[1]
         
         if(eleccion !=3):
-            # Obtenemos los datos sin contar el  último elemento
+            # Obtenemos los datos sin contar el primer elemento
             datos = np.array(datos[1:])
             # Se separan los datos
             fila = datos[:,contador]
@@ -50,7 +49,8 @@ class robot_cambiar_fechas(Robot):
             
             # Se abre camino hasta el formulario para cambiar fechas
             self.driver.find_element_by_link_text("Editar ajustes").click()
-            self.driver.find_element_by_link_text("General").click()
+            collapsable = self.driver.find_element_by_xpath("//*[@id='id_general' and @class='clearfix collapsible']")
+            collapsable.find_element_by_link_text("General").click()
             self.driver.find_element_by_link_text("Temporalización").click()
             self.driver.find_element_by_link_text("Temporalización").location_once_scrolled_into_view
             
@@ -132,9 +132,9 @@ class robot_cambiar_fechas(Robot):
             self.set_fecha('open',inicio_actividad)
             self.set_fecha('close',fin_actividad)
 
-            # # Enviamos el formulario
-            # self.driver.find_element_by_id('id_submitbutton2').location_once_scrolled_into_view
-            # self.driver.find_element_by_id('id_submitbutton2').click()
+            # Enviamos el formulario
+            self.driver.find_element_by_id('id_submitbutton2').location_once_scrolled_into_view
+            self.driver.find_element_by_id('id_submitbutton2').click()
         except Exception as e:
             # En caso de no ser encontrado se captura la excepción y  se registra en el log
             self.log +=self._LOGS[6]+ str(e)

@@ -6,7 +6,7 @@ class leer_datos_recalificar(leer_datos):
 
     def lectura_especifica(self,file_path, tipo_lectura):
         try:
-            # Lee el archivo csv por su ubicación
+            # Lee el archivo xlxs por su ubicación
             data = pd.read_csv(file_path)
 
             # Si desean hacer una recalificación completa

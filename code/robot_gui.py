@@ -37,7 +37,7 @@ class robot_gui():
         self.frame_left = tk.Frame(self.root)
         self.frame_left.pack(side = "left")
 
-        #Botón para cargar los datos del csv
+        #Botón para cargar los datos del xlxs
         button_cargar_datos = tk.Button(self.frame_left, text = "Cargar datos.",comman = lambda:self.open_file()) 
         button_cargar_datos.grid(row = 0, column = 1) 
 
@@ -163,8 +163,8 @@ class robot_gui():
 
     def open_file(self):
         # Obtiene el path del archivo selexionado por el usuario
-        file_path = tk.filedialog.askopenfilename(filetypes =(("Archivo CSV", "*.csv"),("Todos los archivos","*.*")),
-                           title = "Escoge el archivo .csv")
+        file_path = tk.filedialog.askopenfilename(filetypes =(("Archivo xlxs", "*.xlxs"),("Todos los archivos","*.*")),
+                           title = "Escoge el archivo .xlxs")
         try:
             #Intenta abrirlo
             # Si existe puede procegir a otras verificaciones

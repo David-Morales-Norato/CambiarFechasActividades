@@ -4,11 +4,11 @@ if __name__ == '__main__':
     cambiar_fechas_gui()
 
 # Por hacer
-# Probar si está cambiando bien las fechas para la tercera opción
-# REARREGLAR TODOS LOS OBJETOS
+# cambiar xlxs por xlsx jejej
+# Verificar que se puedan cambiar la fecha
+# habilitar la edición en el formulario de temporalización
 
-# Crear nuevo objeto heredable read_files
-
+# Mejorar salidas de logs
 
 # Por hacer documentación
 
