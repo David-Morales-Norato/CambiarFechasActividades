@@ -8,7 +8,7 @@ class leer_datos_cambiar_fechas(leer_datos):
 
     def lectura_especifica(self,file_path,tipo_lectura):
         try:
-            # Lee el archivo xlxs por su ubicación
+            # Lee el archivo xlsx por su ubicación
             
             # Si desean hacer una cambio de un número n de semanas
             if(tipo_lectura == 1):

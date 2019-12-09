@@ -3,4 +3,3 @@ file_name = "/home/david-norato/Documentos/EXPERTIC/cambiar_fechas_actividades/d
 
 leer_datos = leer_datos_cambiar_fechas()
 datos = leer_datos.lectura_especifica(file_name,3)
-print(leer_datos.log)

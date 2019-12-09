@@ -10,7 +10,7 @@ class cambiar_fechas_gui(robot_gui):
         # Variable de control de la opción del tipo de tarea que se va a usar
         self.opcion = tk.IntVar()
         self.opcion.set(0) # Se setea en 0, el caso en que no ha escogido ninguna opción
-
+        self.root.title("Robot para reprogramar fechas de actividades")
         # Mover número 'n' de semanas 1
         # Mover a una fecha específica 2
         # Mover según el calendario académico 3
@@ -27,7 +27,7 @@ class cambiar_fechas_gui(robot_gui):
         self.root.mainloop()
 
     def pre_run_especifico(self):
-        # Lemos los datos del archivo xlxs
+        # Lemos los datos del archivo xlsx
         leer_datos = leer_datos_cambiar_fechas()
         datos = leer_datos.lectura_especifica(self.file_path, self.opcion.get())
         if(len(leer_datos.get_log())<1): # Si no hay algún error al leer los datos
@@ -46,9 +46,8 @@ class cambiar_fechas_gui(robot_gui):
         # Mover número 'n' de semanas 1
         # Mover a una fecha específica 2
         # Mover según el calendario académico 3
-        tipo_recalificacion = tipo_tarea
-        # Corre el robot y recorre cursos para recalificar 
-        self.robot.recorrer_cursos(datos, tipo_recalificacion)
+        # Corre el robot y recorre cursos para cambiar fechas 
+        self.robot.recorrer_cursos(datos, tipo_tarea)
 
     def revisar_log(self):
 

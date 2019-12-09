@@ -54,6 +54,8 @@ class robot_cambiar_fechas(Robot):
             self.driver.find_element_by_link_text("Temporalización").click()
             self.driver.find_element_by_link_text("Temporalización").location_once_scrolled_into_view
             
+            self.habilitar("id_timeopen_enabled","1")
+            self.habilitar("id_timeclose_enabled","1")
 
         except Exception as e:
             # En caso de no encontrar alguno se registra en el log
@@ -196,3 +198,8 @@ class robot_cambiar_fechas(Robot):
         if days_ahead <= 0: # Target day already happened this week
             days_ahead += 7
         return d + datetime.timedelta(days_ahead) - datetime.timedelta(hours=36)
+
+    def habilitar(self,id_a_habilitar,valor):
+        input_habilitar = self.driver.find_element_by_xpath("//input[@id = '"+id_a_habilitar+"']")
+        if(not input_habilitar.is_selected()):
+            input_habilitar.click()
