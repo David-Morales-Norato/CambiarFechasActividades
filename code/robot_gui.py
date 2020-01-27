@@ -73,6 +73,11 @@ class robot_gui():
         # Se activa una vez que se haya terminado de ejecutar el robot
         self.button_log = tk.Button(self.frame_right, text = "Revisar estadisticas",state="disabled",comman = lambda:self.imprimir_estadisticas()) 
         self.button_log.grid(row = 1, column = 0) 
+        
+        # Botón que guardará el log puro para ser analizado en un arvhivo plano
+        # Se activa una vez que se haya terminado de ejecutar el robot
+        self.button_guardar = tk.Button(self.frame_right, text = "Guardar log",state="disabled",comman = lambda:self.save_file()) 
+        self.button_guardar.grid(row = 2, column = 0) 
 
         # En caso de que se quieran colocar varias opciones
         self.opcion = None
@@ -153,6 +158,7 @@ class robot_gui():
 
         # Activa el botón para ver las estadísticas
         self.button_log.config(state="normal")
+        self.button_guardar.config(state="normal")
         self.label_logs_result.config(text = "Terminado!")
 
         # Cierra el robot y el navegador
@@ -177,6 +183,29 @@ class robot_gui():
             self.log += self.LOGS[0] + str(self.file_path)
             self.label_logs_result.config(text = self.LOGS[0])
 
+    def save_file(self):
+        try:
+            # Obtiene el path del archivo selexionado por el usuario
+            f = tkinter.filedialog.asksaveasfile(mode = 'w', defaultextension=".txt")
+            if f is None: # asksaveasfile return `None` if dialog closed with "cancel".
+                return
+
+            robot_log = self.robot.log
+            gui_log = self.log
+            path_save_file = f.name
+            with open(path_save_file,'w') as f:
+                f.write("Robot LOG: \n")
+                f.write(robot_log)
+                f.write("\nGUI LOG: \n")
+                f.write(gui_log)
+                self.label_logs_result.config(text = "Archivo guardado exitosamente")
+
+                #Si no existe el archivo crea error
+        except Exception as e:
+            self.log += "|No se pudo guardar el archivo  |Exeption: "+ str(e)
+            self.label_logs_result.config(text = "|No se pudo guardar el archivo  |Exeption: "+ str(e))
+
+
 
     @abstractmethod
     def revisar_log(self):
@@ -185,7 +214,6 @@ class robot_gui():
     def imprimir_estadisticas(self):
         # Imprime las estadísticas en el label de la GUI
         self.label_logs_result.config(text = self.revisar_log())
-
 
     def cerrar_driver(self):
         #Cierra el driver

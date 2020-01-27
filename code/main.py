@@ -4,8 +4,6 @@ if __name__ == '__main__':
     cambiar_fechas_gui()
 
 # Por hacer
-# Verificar que se puedan cambiar la fecha
-# habilitar la edición en el formulario de temporalización
 
 # Mejorar salidas de logs
 

@@ -34,6 +34,7 @@ class cambiar_fechas_gui(robot_gui):
             # Se pasan los datos y la opción de la tarea del robot
             self.run_robot(datos,self.opcion.get())
         else:
+
             # Si hay por lo menos un error lo imprime en el label de la GUI
             self.log += leer_datos.get_log()
             self.label_logs_result.config(text = leer_datos.get_log())
