@@ -84,15 +84,10 @@ class robot_gui():
 
     def get_path_driver(self):
 
-        carpeta_drivers = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/chromedriver/"
-        if platform == "linux" or platform == "linux2":
-            chrome_driver_path = 'Linux/'
-        elif platform == "darwin":
-            chrome_driver_path = 'OSX/'
-        elif platform == "win32":
-            chrome_driver_path = 'Win32/'
+        carpeta_drivers = os.path.dirname(os.path.abspath(__file__)) + "/chromedriver/"
 
-        return carpeta_drivers+ chrome_driver_path+'chromedriver'
+
+        return carpeta_drivers+'chromedriver'
 
 
     def pre_run(self):

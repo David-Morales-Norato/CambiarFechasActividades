@@ -2,7 +2,7 @@ from robot_gui import robot_gui, tk
 from robot_cambiar_fechas import robot_cambiar_fechas
 from leer_cambiar_fechas import leer_datos_cambiar_fechas
 
-DEBUG = True
+DEBUG = False
 
 class cambiar_fechas_gui(robot_gui):
     def __init__(self):
