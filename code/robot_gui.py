@@ -5,6 +5,7 @@ import tkinter.filedialog
 import os
 from sys import platform
 from sys import maxsize as msBits
+import vlc
 
 class robot_gui():
     def __init__(self):
@@ -49,7 +50,7 @@ class robot_gui():
         self.input_user_entry.grid(row = 1, column =1, pady = 20)
 
         #Campo de texto que guarda el input de la contraseña.
-        self.input_pass_entry = tk.Entry(self.frame_left) 
+        self.input_pass_entry = tk.Entry(self.frame_left, show = '*') 
         self.input_pass_entry.grid(row = 2, column = 1, pady = 20)
 
         #Label para describir que es importante
@@ -84,7 +85,7 @@ class robot_gui():
 
     def get_path_driver(self):
 
-        carpeta_drivers = os.path.dirname(os.path.abspath(__file__)) + "/chromedriver/"
+        carpeta_drivers = os.path.dirname(os.path.abspath(__file__)) + "/files/"
 
 
         return carpeta_drivers+'chromedriver'
@@ -147,6 +148,7 @@ class robot_gui():
             self.cerrar_driver()
             self.log += log
             self.label_logs_result.config(text = log)
+            self.reproducir_sonido()
             return
 
         self.run_robot_especifico(datos, tipo_tarea)
@@ -155,7 +157,7 @@ class robot_gui():
         self.button_log.config(state="normal")
         self.button_guardar.config(state="normal")
         self.label_logs_result.config(text = "Terminado!")
-
+        self.reproducir_sonido()
         # Cierra el robot y el navegador
         self.cerrar_driver()
         pass
@@ -214,6 +216,11 @@ class robot_gui():
         #Cierra el driver
         self.robot.cerrar()
 
+
+    def reproducir_sonido(self):
+        path_files = os.path.dirname(os.path.abspath(__file__)) + "/files/bell.wav"
+        p = vlc.MediaPlayer(path_files)
+        p.play()
 
         
 
